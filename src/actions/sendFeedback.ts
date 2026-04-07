@@ -7,16 +7,20 @@ export async function sendFeedback(formData: FormData): Promise<void> {
   const message = String(formData.get("message") ?? "").trim();
 
   if (!userEmail || !message) {
-    throw new Error("Please provide both email and message.");
+    return;
   }
 
-  await sendAppEmail({
-    to: "info@wasgehttueb.app",
-    subject: "New Feedback via Website",
-    text: `From: ${userEmail}\n\nMessage:\n${message}`,
-    html: `<p><strong>From:</strong> ${escapeHtml(userEmail)}</p><p><strong>Message:</strong></p><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>`,
-    replyTo: userEmail,
-  });
+  try {
+    await sendAppEmail({
+      to: "info@wasgehttueb.app",
+      subject: "New Feedback via Website",
+      text: `From: ${userEmail}\n\nMessage:\n${message}`,
+      html: `<p><strong>From:</strong> ${escapeHtml(userEmail)}</p><p><strong>Message:</strong></p><p>${escapeHtml(message).replace(/\n/g, "<br />")}</p>`,
+      replyTo: userEmail,
+    });
+  } catch (error) {
+    console.error("sendFeedback failed", error);
+  }
 
 }
 
