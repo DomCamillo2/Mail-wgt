@@ -8,16 +8,17 @@ type SendAppEmailInput = {
   replyTo?: string;
 };
 
-const resendApiKey = process.env.RESEND_API_KEY;
-
-if (!resendApiKey) {
-  throw new Error("Missing RESEND_API_KEY environment variable.");
-}
-
-const resend = new Resend(resendApiKey);
 const APP_SENDER = "WasGehtTüb <info@wasgehttueb.app>";
 
 export async function sendAppEmail({ to, subject, text, html, replyTo }: SendAppEmailInput) {
+  const resendApiKey = process.env.RESEND_API_KEY;
+
+  if (!resendApiKey) {
+    throw new Error("Missing RESEND_API_KEY environment variable.");
+  }
+
+  const resend = new Resend(resendApiKey);
+
   if (!text && !html) {
     throw new Error("Either text or html content must be provided.");
   }
